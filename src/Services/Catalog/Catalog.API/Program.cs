@@ -2,7 +2,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 //add services to the container
 
-//carter
+//carter. It simplifies the definition and configuration of routes in ASP.NET core
 builder.Services.AddCarter();
 //mediatR
 builder.Services.AddMediatR(config => {
