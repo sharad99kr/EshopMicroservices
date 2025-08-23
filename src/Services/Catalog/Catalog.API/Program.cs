@@ -1,5 +1,5 @@
 
-using BuildingBlocks.Exceptions.Handler;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,6 +25,11 @@ builder.Services.AddCarter();
 builder.Services.AddMarten(opts => {
     opts.Connection(builder.Configuration.GetConnectionString("Database")!);
 }).UseLightweightSessions();
+
+if(builder.Environment.IsDevelopment()) {
+    //Seeding should only happen in development also we need to make sure DB is ready before we attempt to inject data(not yet handled)
+    builder.Services.InitializeMartenWith<CatalogInitialData>();
+}
 
 builder.Services.AddExceptionHandler<CustomExceptionHandler>();
 
