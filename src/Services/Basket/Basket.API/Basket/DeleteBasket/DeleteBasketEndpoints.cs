@@ -1,6 +1,7 @@
 ﻿
 using Basket.API.Basket.GetBasket;
-using Mapster;
+using Microsoft.AspNetCore.Mvc;
+
 
 namespace Basket.API.Basket.DeleteBasket
 {
@@ -15,7 +16,7 @@ namespace Basket.API.Basket.DeleteBasket
                 return Results.Ok(response);
             })
             .WithName("DeleteProduct")
-            .Produces<GetBasketResponse>(StatusCodes.Status200OK)
+            .Produces<DeleteBasketResponse>(StatusCodes.Status200OK)
             .ProducesProblem(StatusCodes.Status400BadRequest)
             .ProducesProblem(StatusCodes.Status404NotFound)
             .WithSummary("Delete Product")
