@@ -1,4 +1,5 @@
 ﻿
+using Ordering.Domain.Events;
 using Ordering.Domain.ValueObjects;
 using System.Xml.Linq;
 
@@ -42,7 +43,7 @@ namespace Ordering.Domain.Models
             BillingAddress = billingAddress;
             Payment = payment;
             Status = orderStatus;
-            AddDomainEvent(new OrderCreatedEvent(this));
+            AddDomainEvent(new OrderUpdatedEvent(this));
         }
 
         public void Add(ProductId productId, int quantity, decimal price) {
