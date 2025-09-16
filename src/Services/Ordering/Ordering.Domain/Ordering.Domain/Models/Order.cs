@@ -1,4 +1,7 @@
 ﻿
+using Ordering.Domain.ValueObjects;
+using System.Xml.Linq;
+
 namespace Ordering.Domain.Models
 {
     public class Order : Aggregate<OrderId>
@@ -17,5 +20,46 @@ namespace Ordering.Domain.Models
             private set { }
         }
 
+        public static Order Create(OrderId id, CustomerId customerId, OrderName orderName,
+            Address shippingAddress, Address billingAddress, Payment payment) {
+            var order = new Order();
+            order.Id = id;
+            order.CustomerId = customerId;
+            order.OrderName = orderName;
+            order.ShippingAddress = shippingAddress;
+            order.BillingAddress = billingAddress;
+            order.Payment = payment;
+            order.Status = OrderStatus.Pending;
+            
+            order.AddDomainEvent(new OrderCreatedEvent(order));
+            return order;
+        }
+
+        public void Update(OrderName orderName, Address shippingAddress, Address billingAddress,
+                                            Payment payment, OrderStatus orderStatus) {
+            OrderName = orderName;
+            ShippingAddress = shippingAddress;
+            BillingAddress = billingAddress;
+            Payment = payment;
+            Status = orderStatus;
+            AddDomainEvent(new OrderCreatedEvent(this));
+        }
+
+        public void Add(ProductId productId, int quantity, decimal price) {
+            ArgumentOutOfRangeException.ThrowIfNegativeOrZero(quantity);
+            ArgumentOutOfRangeException.ThrowIfNegativeOrZero(price);
+            var orderItem= new OrderItem(Id, productId, quantity, price);
+            _orderItems.Add(orderItem);
+        }
+
+        public void Remove(ProductId productId) {
+            
+            var orderItem = _orderItems.FirstOrDefault(x=> x.ProductId == productId);
+            if (orderItem is not null)
+            {
+                _orderItems.Remove(orderItem);
+            }
+            
+        }
     }
 }
